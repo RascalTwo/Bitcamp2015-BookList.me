@@ -1,7 +1,36 @@
 <head>
-	<title>Bitcamp 2015 Kent State University</title>
+	<title>Bitcamp 2015 Kent State University</title>	
 </head>
 
 <body>
 	<h1>Welcome to Meteor!</h1>
+	{{> loginButtons}}
+	{{#each posts}}
+		{{> postTemplate}}
+	{{/each}}
+	{{#if loggedIn}}
+		{{> submissionTemplate}}
+	{{/if}}
 </body>
+
+<template name='postTemplate'>
+	<br>
+	{{bookName}} - {{isbn}}
+	<br>
+	{{quality}} - ${{askingPrice}}
+	<br>
+	{{posterName}} - {{posterId}}
+	<br>
+</template>
+
+<template name='submissionTemplate'>
+	<div style='width:100px;'>
+		<form id='submissionForm'>
+			<input type='text' name='bookName' placeholder='Book Name'/>
+			<input type='text' name='isbn' placeholder='Book ISBN'/>
+			<input type='text' name='quality' placeholder='Quality'/>
+			<input type='text' name='askingPrice' placeholder='Asking Price'/>
+			<button>Submit</button>
+		</form>
+	</div>
+</template>
