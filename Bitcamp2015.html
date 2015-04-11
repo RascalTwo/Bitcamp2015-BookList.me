@@ -1,35 +1,131 @@
 <head>
-	<title>Bitcamp 2015 Kent State University</title>	
+	<title>Bitcamp 2015 Kent State University</title>
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 
 <body>
-	<h1>Welcome to Meteor!</h1>
-	{{> loginButtons}}
-	{{#each posts}}
-		{{> postTemplate}}
-	{{/each}}
-	{{#if loggedIn}}
-		{{> submissionTemplate}}
-	{{/if}}
+	<nav class="navbar navbar-inverse">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">Textbooks</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="#">Page 2</a></li>
+					<li><a href="#">Page 3</a></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container">
+		<div class="column-center" style='float: left; width: 20%;'>
+			{{> loginButtons}}
+			{{currentUser.emails.[0].address}}
+			{{currentUser.username}}
+			{{#if currentUser}}
+				{{> submissionTemplate}}
+			{{/if}}
+		</div>
+		<div class="column-left" style='float: right; width: 20%;'>
+			<div align='center'>
+				<form id='searchForm' align='center'>
+					{{> esInput index="posts" placeholder="Search..." }}
+					<button>Search</button>
+					<br>
+					<ul style='list-style:none;' align='center'>
+						{{#esEach index="posts"}}
+							<hr style='border: 1px solid #000;'>
+							<li>{{title}}</li>
+							<li><img src='{{imageLink}}'></li>
+							<li>{{quality}}     -     {{askingPrice}}</li>
+							<hr style='border: 1px solid #000;'>
+						{{/esEach}}
+					</ul>
+				</form>
+			</div>
+		</div>
+		<div class="column-right" style='display: inline-block; width: 60%;'>
+			{{#if atHome}}
+				{{#each posts}}
+					{{> postTemplate}}
+				{{/each}}
+			{{/if}}
+		</div>
+	</div>
 </body>
 
 <template name='postTemplate'>
-	<br>
-	{{bookName}} - {{isbn}}
-	<br>
-	{{quality}} - ${{askingPrice}}
-	<br>
-	{{posterName}} - {{posterId}}
-	<br>
+	<div style='border: 2px solid #000000;padding: 40px 0px 40px 0px;min-height:300px'>
+		<div text-align='center' align='center'>{{title}}</div>
+		<br>
+		<div>
+			<div align='right'>{{isbn}}</div>
+			<img src='{{imageLink}}' align="right">
+			{{description}}
+		</div>
+		<br>
+		<table>
+			<tr>
+				<td>Condition -</td>
+				<td>{{quality}}</td>
+			</tr>
+			<tr>
+				<td>Asking Price -</td>
+				<td>${{askingPrice}}</td>
+			</tr>
+			<tr>
+				<td>Seller -</td>
+				<td>{{posterName}}</td>
+			</tr>
+			<tr>
+				<td>Posted -</td>
+				<td>{{formatTime postDate}}</td>
+			</tr>
+			<tr>
+				<td>Extra Notes -</td>
+				<td>{{extraNotes}}</td>
+			</tr>
+			<tr>
+				<td>Contact Info -</td>
+				<td>
+					{{#if currentUser}}
+					<button id='viewContactInfoButton{{_id}}' onclick='document.getElementById("viewContactInfoButton{{_id}}").style.display = "none"; document.getElementById("contactInfoSpan{{_id}}").style.display = "inline-block"'>View Contact Information</button>
+					<span style='display:none' id='contactInfoSpan{{_id}}'>
+						{{posterData.emails.[0].address}}
+					</span>
+					{{/if}}
+				</td>
+			</tr>
+			{{#if equal currentUser.username posterName}}
+				<tr>
+					<td>Seller Commands -</td>
+					<td><button id='deletePostButton' name='{{_id}}'>Delete Post</button></td>
+				</tr>
+			{{/if}}
+		</table>
+		{{getEmailByUsername}}
+	</div>
 </template>
 
 <template name='submissionTemplate'>
-	<div style='width:100px;'>
+	<div style='width:100px;float:left'>
 		<form id='submissionForm'>
-			<input type='text' name='bookName' placeholder='Book Name'/>
 			<input type='text' name='isbn' placeholder='Book ISBN'/>
-			<input type='text' name='quality' placeholder='Quality'/>
-			<input type='text' name='askingPrice' placeholder='Asking Price'/>
+			<select id='qualityDropDown'>
+				<option value='Still In Plastic'>Still In Plastic</option>
+				<option value='Mint'>Mint</option>
+				<option value='Great'>Great</option>
+				<option value='Average'>Average</option>
+				<option value='Poor'>Poor</option>
+				<option value='Horrable'>Horrable</option>
+				<option value='Missing Pages'>Missing Pages</option>
+			</select>
+			<input type='number' name='askingPrice' placeholder='Asking Price'/>
+			<input type='text' name='extraNotes' placeholder='Extra Notes'/>
 			<button>Submit</button>
 		</form>
 	</div>

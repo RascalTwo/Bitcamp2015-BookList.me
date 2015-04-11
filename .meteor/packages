@@ -10,3 +10,6 @@ insecure
 u2622:persistent-session
 accounts-ui
 accounts-password
+jquery
+matteodem:easy-search
+iron:router
