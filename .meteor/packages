@@ -10,3 +10,4 @@ insecure
 u2622:persistent-session
 accounts-password
 iron:router
+accounts-ui
