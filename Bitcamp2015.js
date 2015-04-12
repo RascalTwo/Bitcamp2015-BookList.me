@@ -20,7 +20,7 @@ if (Meteor.isClient) {
 		else{
 			return false
 		}
-	});
+	})
 
 	Router.route('/posts/:_id', function () {
 		var item = postCollection.findOne({_id: this.params._id})
@@ -44,13 +44,37 @@ if (Meteor.isClient) {
 		}
 	})
 
-	Template.postTemplate.helpers({
+	UI.body.helpers({
 		getEmailByUsername: function(){
-			var users = Meteor.users.find({}).fetch()
+		/*	var users = Meteor.users.find({}).fetch()
 			for (var i = 0; i < Meteor.users.find({}).fetch().length; i++){
-	//			console.log(users[0])
-	//			console.log(users[0].username)
-			}
+				console.log(users[i])
+			}*/
+
+		//	$.ajax({
+		//		url: 'http://api.reimaginebanking.com/atms?key=CUST782f4b0c6ec7add5d3bed44ce22c88ac',
+		//		success: function(results){
+		//			console.log(results)	
+		//		}
+		//	}); 
+		}
+	})
+
+	$(document).ready(function() {
+		$('.my-custom-link').click(function(){
+			console.log('doing')
+			$(document).trigger('coinbase_show_modal', '6ad16caf532b5d802a1141766ee4d823');
+			return false;
+		})
+
+		$(document).on('coinbase_payment_complete', function(event, code){
+			console.log("Payment completed for button " + code);
+			//	window.location = "/confirmation.html";
+		})
+	})
+	Template._loginButtonsLoggedInDropdown.events({
+		'click #login-buttons-edit-profile': function(event) {
+			Router.go('profileEdit');
 		}
 	})
 
@@ -126,6 +150,7 @@ if (Meteor.isClient) {
 					alert(failedReasons[i])
 				}
 			}
+
 		},
 		'click #deletePostButton': function (event){
 			postCollection.remove(event.target.getAttribute('name'))
@@ -133,13 +158,28 @@ if (Meteor.isClient) {
 	})
 
 	Accounts.ui.config({
-		passwordSignupFields: 'USERNAME_AND_EMAIL'
+		requestPermissions: {},
+		forceUsernameLowercase: true,
+		forcePasswordLowercase: true,
+		extraSignupFields: [{
+			fieldName: 'username',
+			fieldLabel: 'Username',
+			inputType: 'text',
+			visible: true,
+			validate: function (value, errorFunction){
+				if (!value){
+					errorFunction("You need a Username to use this website");		
+					return false;
+				}
+				else{
+					return true;
+				}
+			},
+			saveToProfile: true
+		}]
 	})
 }
 if (Meteor.isServer) {
-/*	Meteor.startup(function (){
-		Meteor.publish('allUsers', function() {
-			return Meteor.users.find();
-		})
-	})*/
+	Meteor.startup(function (){
+	})
 }

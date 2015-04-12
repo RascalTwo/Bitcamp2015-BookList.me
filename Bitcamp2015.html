@@ -5,45 +5,44 @@
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 
-<body>
-	<nav class="navbar navbar-inverse">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="#">Textbooks</a>
-			</div>
-			<div>
-				<ul class="nav navbar-nav">
-					<li><a href="#">Page 2</a></li>
-					<li><a href="#">Page 3</a></li>
-					<li></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+<template name="_loginButtonsAdditionalLoggedInDropdownActions">
+    <button class="btn btn-default btn-block" id="login-buttons-edit-profile">Edit profile</button>
+</template>
 
+<body>
+	<nav class="navbar navbar-inverse" role="navigation">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Project name</a>
+		</div>
+
+		<ul class="nav navbar-nav navbar-left">
+			<li style='padding: 10px 0px 0px 0px'>
+				{{> esInput index="posts" placeholder="Search..." }}
+			</li>
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			{{> loginButtons }} <!-- here -->
+		</ul>
+	</nav>
 	<div class="container">
 		<div class="column-center" style='float: left; width: 20%;'>
-			{{> loginButtons}}
-			{{currentUser.emails.[0].address}}
-			{{currentUser.username}}
 			{{#if currentUser}}
 				{{> submissionTemplate}}
 			{{/if}}
 		</div>
 		<div class="column-left" style='float: right; width: 20%;'>
 			<div align='center'>
-				<form id='searchForm' align='center'>
-					{{> esInput index="posts" placeholder="Search..." }}
-					<button>Search</button>
-					<br>
+				<form id='searchForm' align='center' style='margin-left:75px'>
 					<ul style='list-style:none;' align='center'>
+						<div style='border-radius: 5px 5px 5px 5px;-moz-border-radius: 5px 5px 5px 5px;-webkit-border-radius: 5px 5px 5px 5px;	background-color:#eadac0'>
 						{{#esEach index="posts"}}
-							<hr style='border: 1px solid #000;'>
 							<li>{{title}}</li>
-							<li><img src='{{imageLink}}'></li>
-							<li>{{quality}}     -     {{askingPrice}}</li>
-							<hr style='border: 1px solid #000;'>
+							<li><img src='{{imageLink}}' align='center'></li>
+							<li>{{quality}}</li>
+							<li>${{askingPrice}}</li>
+							<hr style='border: 1px solid #000fff;'>
 						{{/esEach}}
+						</div>
 					</ul>
 				</form>
 			</div>
@@ -56,15 +55,16 @@
 			{{/if}}
 		</div>
 	</div>
+	{{getEmailByUsername}}
 </body>
 
 <template name='postTemplate'>
-	<div style='border: 2px solid #000000;padding: 40px 0px 40px 0px;min-height:300px'>
+	<div id='postDiv' class='postDiv' style='padding: 0px 0px 0px 0px;min-height:300px'>
 		<div text-align='center' align='center'>{{title}}</div>
 		<br>
 		<div>
-			<div align='right'>{{isbn}}</div>
-			<img src='{{imageLink}}' align="right">
+			<div align='right' style='padding: 0px 40px 0px 0px;'>{{isbn}}</div>
+			<img src='{{imageLink}}' align="right" style='padding: 0px 20px 0px 0px;'>
 			{{description}}
 		</div>
 		<br>
@@ -107,12 +107,11 @@
 				</tr>
 			{{/if}}
 		</table>
-		{{getEmailByUsername}}
 	</div>
 </template>
 
 <template name='submissionTemplate'>
-	<div style='width:100px;float:left'>
+	<div style='width:25px;float:left'>
 		<form id='submissionForm'>
 			<input type='text' name='isbn' placeholder='Book ISBN'/>
 			<select id='qualityDropDown'>
@@ -127,6 +126,7 @@
 			<input type='number' name='askingPrice' placeholder='Asking Price'/>
 			<input type='text' name='extraNotes' placeholder='Extra Notes'/>
 			<button>Submit</button>
+
 		</form>
 	</div>
 </template>

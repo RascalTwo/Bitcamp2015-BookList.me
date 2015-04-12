@@ -8,8 +8,9 @@ meteor-platform
 autopublish
 insecure
 u2622:persistent-session
-accounts-ui
 accounts-password
 jquery
 matteodem:easy-search
 iron:router
+ian:accounts-ui-bootstrap-3
+twbs:bootstrap
